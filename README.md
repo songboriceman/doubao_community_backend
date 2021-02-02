@@ -9,7 +9,11 @@
 java，python，前端，c++，.net
 
 ### 代码开源地址
-https://github.com/songboriceman/doubao_community_frontend
+前端：https://github.com/songboriceman/doubao_community_frontend
+后端：https://github.com/songboriceman/doubao_community_backend
+
+### intelij lombok 插件下载地址：
+https://plugins.jetbrains.com/plugin/6317-lombok/versions
 
 ### 项目实战大纲：
 01.初始化vue前端项目
