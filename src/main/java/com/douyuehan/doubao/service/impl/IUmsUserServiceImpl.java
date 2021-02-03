@@ -3,7 +3,9 @@ package com.douyuehan.doubao.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.douyuehan.doubao.common.exception.ApiAsserts;
+import com.douyuehan.doubao.jwt.JwtUtil;
 import com.douyuehan.doubao.mapper.UmsUserMapper;
+import com.douyuehan.doubao.model.dto.LoginDTO;
 import com.douyuehan.doubao.model.dto.RegisterDTO;
 import com.douyuehan.doubao.model.entity.UmsUser;
 import com.douyuehan.doubao.service.IUmsUserService;
@@ -43,6 +45,25 @@ public class IUmsUserServiceImpl extends ServiceImpl<UmsUserMapper, UmsUser> imp
 
         return addUser;
     }
-
+    @Override
+    public UmsUser getUserByUsername(String username) {
+        return baseMapper.selectOne(new LambdaQueryWrapper<UmsUser>().eq(UmsUser::getUsername, username));
+    }
+    @Override
+    public String executeLogin(LoginDTO dto) {
+        String token = null;
+        try {
+            UmsUser user = getUserByUsername(dto.getUsername());
+            String encodePwd = MD5Utils.getPwd(dto.getPassword());
+            if(!encodePwd.equals(user.getPassword()))
+            {
+                throw new Exception("密码错误");
+            }
+            token = JwtUtil.generateToken(String.valueOf(user.getUsername()));
+        } catch (Exception e) {
+            log.warn("用户不存在or密码验证失败=======>{}", dto.getUsername());
+        }
+        return token;
+    }
 
 }
