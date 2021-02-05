@@ -14,6 +14,7 @@ import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.douyuehan.doubao.jwt.JwtUtil.USER_NAME;
 
 
 @RestController
@@ -42,5 +43,11 @@ public class UmsUserController extends BaseController {
         Map<String, String> map = new HashMap<>(16);
         map.put("token", token);
         return ApiResult.success(map, "登录成功");
+    }
+
+    @RequestMapping(value = "/info", method = RequestMethod.GET)
+    public ApiResult<UmsUser> getUser(@RequestHeader(value = USER_NAME) String userName) {
+        UmsUser user = iUmsUserService.getUserByUsername(userName);
+        return ApiResult.success(user);
     }
 }
