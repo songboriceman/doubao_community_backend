@@ -13,7 +13,10 @@ import com.douyuehan.doubao.model.entity.BmsTag;
 import com.douyuehan.doubao.model.entity.BmsTopicTag;
 import com.douyuehan.doubao.model.entity.UmsUser;
 import com.douyuehan.doubao.model.vo.PostVO;
+import com.douyuehan.doubao.model.vo.ProfileVO;
 import com.douyuehan.doubao.service.IBmsPostService;
+import com.douyuehan.doubao.service.IBmsTagService;
+import com.douyuehan.doubao.service.IUmsUserService;
 import com.vdurmont.emoji.EmojiParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -36,7 +39,10 @@ public class IBmsPostServiceImpl extends ServiceImpl<BmsTopicMapper, BmsPost> im
 
     @Autowired
     @Lazy
-    private com.douyuehan.doubao.service.IBmsTagService iBmsTagService;
+    private IBmsTagService iBmsTagService;
+
+    @Autowired
+    private IUmsUserService iUmsUserService;
 
     @Autowired
     private com.douyuehan.doubao.service.IBmsTopicTagService IBmsTopicTagService;
@@ -84,5 +90,34 @@ public class IBmsPostServiceImpl extends ServiceImpl<BmsTopicMapper, BmsPost> im
         }
 
         return topic;
+    }
+
+    @Override
+    public Map<String, Object> viewTopic(String id) {
+        Map<String, Object> map = new HashMap<>(16);
+        BmsPost topic = this.baseMapper.selectById(id);
+        Assert.notNull(topic, "当前话题不存在,或已被作者删除");
+        // 查询话题详情
+        topic.setView(topic.getView() + 1);
+        this.baseMapper.updateById(topic);
+        // emoji转码
+        topic.setContent(EmojiParser.parseToUnicode(topic.getContent()));
+        map.put("topic", topic);
+        // 标签
+        QueryWrapper<BmsTopicTag> wrapper = new QueryWrapper<>();
+        wrapper.lambda().eq(BmsTopicTag::getTopicId, topic.getId());
+        Set<String> set = new HashSet<>();
+        for (BmsTopicTag articleTag : IBmsTopicTagService.list(wrapper)) {
+            set.add(articleTag.getTagId());
+        }
+        List<BmsTag> tags = iBmsTagService.listByIds(set);
+        map.put("tags", tags);
+
+        // 作者
+
+        ProfileVO user = iUmsUserService.getUserProfile(topic.getUserId());
+        map.put("user", user);
+
+        return map;
     }
 }
