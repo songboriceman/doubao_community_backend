@@ -1,14 +1,18 @@
 package com.douyuehan.doubao.controller;
 
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.douyuehan.doubao.common.api.ApiResult;
 import com.douyuehan.doubao.model.dto.LoginDTO;
 import com.douyuehan.doubao.model.dto.RegisterDTO;
+import com.douyuehan.doubao.model.entity.BmsPost;
 import com.douyuehan.doubao.model.entity.UmsUser;
+import com.douyuehan.doubao.service.IBmsPostService;
 import com.douyuehan.doubao.service.IUmsUserService;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
-
+import org.springframework.util.Assert;
 import javax.annotation.Resource;
 import javax.validation.Valid;
 import java.util.HashMap;
@@ -22,6 +26,8 @@ import static com.douyuehan.doubao.jwt.JwtUtil.USER_NAME;
 public class UmsUserController extends BaseController {
     @Resource
     private IUmsUserService iUmsUserService;
+    @Resource
+    private IBmsPostService iBmsPostService;
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     public ApiResult<Map<String, Object>> register(@Valid @RequestBody RegisterDTO dto) {
@@ -54,5 +60,19 @@ public class UmsUserController extends BaseController {
     @RequestMapping(value = "/logout", method = RequestMethod.GET)
     public ApiResult<Object> logOut() {
         return ApiResult.success(null, "注销成功");
+    }
+
+    @GetMapping("/{username}")
+    public ApiResult<Map<String, Object>> getUserByName(@PathVariable("username") String username,
+                                                        @RequestParam(value = "pageNo", defaultValue = "1") Integer pageNo,
+                                                        @RequestParam(value = "size", defaultValue = "10") Integer size) {
+        Map<String, Object> map = new HashMap<>(16);
+        UmsUser user = iUmsUserService.getUserByUsername(username);
+        Assert.notNull(user, "用户不存在");
+        Page<BmsPost> page = iBmsPostService.page(new Page<>(pageNo, size),
+                new LambdaQueryWrapper<BmsPost>().eq(BmsPost::getUserId, user.getId()));
+        map.put("user", user);
+        map.put("topics", page);
+        return ApiResult.success(map);
     }
 }
