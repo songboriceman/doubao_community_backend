@@ -44,5 +44,12 @@ public interface IBmsPostService extends IService<BmsPost> {
      * @return
      */
     List<BmsPost> getRecommend(String id);
-
+    /**
+     * 关键字检索
+     *
+     * @param keyword
+     * @param page
+     * @return
+     */
+    Page<PostVO> searchByKey(String keyword, Page<PostVO> page);
 }
