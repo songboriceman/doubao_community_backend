@@ -75,4 +75,9 @@ public class UmsUserController extends BaseController {
         map.put("topics", page);
         return ApiResult.success(map);
     }
+    @PostMapping("/update")
+    public ApiResult<UmsUser> updateUser(@RequestBody UmsUser umsUser) {
+        iUmsUserService.updateById(umsUser);
+        return ApiResult.success(umsUser);
+    }
 }
