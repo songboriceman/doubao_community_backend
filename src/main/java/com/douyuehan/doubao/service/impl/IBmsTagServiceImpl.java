@@ -46,6 +46,15 @@ public class IBmsTagServiceImpl extends ServiceImpl<BmsTagMapper, BmsTag> implem
         return tagList;
     }
 
+    @Override
+    public Page<BmsPost> selectTopicsByTagId(Page<BmsPost> topicPage, String id) {
 
+        // 获取关联的话题ID
+        Set<String> ids = IBmsTopicTagService.selectTopicIdsByTagId(id);
+        LambdaQueryWrapper<BmsPost> wrapper = new LambdaQueryWrapper<>();
+        wrapper.in(BmsPost::getId, ids);
+
+        return IBmsPostService.page(topicPage, wrapper);
+    }
 
 }

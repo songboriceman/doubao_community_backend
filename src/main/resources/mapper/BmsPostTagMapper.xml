@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.douyuehan.doubao.mapper.BmsTopicTagMapper">
+    <select id="getTopicIdsByTagId" resultType="java.lang.String">
+        SELECT t.topic_id
+        from bms_post_tag t
+        where t.tag_id = #{id}
+    </select>
+</mapper>
