@@ -20,4 +20,13 @@ public interface BmsTopicMapper extends BaseMapper<BmsPost> {
      * @return
      */
     Page<PostVO> selectListAndPage(@Param("page") Page<PostVO> page, @Param("tab") String tab);
+
+    /**
+     * 获取详情页推荐
+     *
+     * @param id
+     * @return
+     */
+    List<BmsPost> selectRecommend(@Param("id") String id);
+
 }

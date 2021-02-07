@@ -12,6 +12,7 @@ import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 
+import java.util.List;
 import java.util.Map;
 
 import static com.douyuehan.doubao.jwt.JwtUtil.USER_NAME;
@@ -45,5 +46,11 @@ public class BmsPostController extends BaseController {
     public ApiResult<Map<String, Object>> view(@RequestParam("id") String id) {
         Map<String, Object> map = iBmsPostService.viewTopic(id);
         return ApiResult.success(map);
+    }
+
+    @GetMapping("/recommend")
+    public ApiResult<List<BmsPost>> getRecommend(@RequestParam("topicId") String id) {
+        List<BmsPost> topics = iBmsPostService.getRecommend(id);
+        return ApiResult.success(topics);
     }
 }

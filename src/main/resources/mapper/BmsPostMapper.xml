@@ -39,4 +39,12 @@
             order by t.view desc, t.create_time desc
         </if>
     </select>
+
+    <select id="selectRecommend" resultType="com.douyuehan.doubao.model.entity.BmsPost">
+        select *
+        from bms_post t
+        where t.id != #{id}
+        order by rand(), t.view
+        limit 10
+    </select>
 </mapper>

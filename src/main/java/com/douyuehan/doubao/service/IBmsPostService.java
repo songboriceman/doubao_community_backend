@@ -37,5 +37,12 @@ public interface IBmsPostService extends IService<BmsPost> {
      * @return
      */
     Map<String, Object> viewTopic(String id);
+    /**
+     * 获取随机推荐10篇
+     *
+     * @param id
+     * @return
+     */
+    List<BmsPost> getRecommend(String id);
 
 }
