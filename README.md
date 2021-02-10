@@ -1,6 +1,9 @@
 ### 豆宝社区项目实战视频教程简介
 本项目实战视频教程全部免费，配套代码完全开源。手把手从零开始搭建一个目前应用最广泛的Springboot+Vue前后端分离多用户社区项目。本项目难度适中，为便于大家学习，每一集视频教程对应在Github上的每一次提交。
 
+### 致谢
+本项目大量借鉴了[极光社区项目](https://github.com/haoyu21/aurora)，在此感谢原作者的无私开源。本项目在其基础上做了一些增删，删除了一些未完成的模块（活动，旅游），新增了评论功能，简化了后端认证与授权功能。最主要的工作是将原项目从零开始开始搭建，各个功能的实现分解成几十步来完成，便于大家更好的学习。
+
 ### 代码开源地址
 [前端](https://github.com/songboriceman/doubao_community_frontend)
 [后端](https://github.com/songboriceman/doubao_community_backend)
